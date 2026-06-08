@@ -30,6 +30,23 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Debug: show git and dist info
+        run: |
+          echo "--- git version ---"
+          git --version || true
+          echo "--- git remote -v ---"
+          git remote -v || true
+          echo "--- git branches ---"
+          git branch -a || true
+          echo "--- git status ---"
+          git status --porcelain=v1 -b || true
+          echo "--- current HEAD ---"
+          git rev-parse --abbrev-ref HEAD || true
+          echo "--- ls .git/config (first 200 lines) ---"
+          sed -n '1,200p' .git/config || true
+          echo "--- dist contents ---"
+          ls -la dist || true
+          du -sh dist || true
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
