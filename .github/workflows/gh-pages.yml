@@ -8,48 +8,23 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           persist-credentials: true
-          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24.13.0'
+          node-version: '20'
       - name: Install dependencies
         run: npm ci
-      - name: Build (client only)
+      - name: Build
         env:
           GH_PAGES: 'true'
-        run: npm run build:client
-      - name: Setup Git user for commit
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Debug: show git and dist info
-        run: |
-          echo "--- git version ---"
-          git --version || true
-          echo "--- git remote -v ---"
-          git remote -v || true
-          echo "--- git branches ---"
-          git branch -a || true
-          echo "--- git status ---"
-          git status --porcelain=v1 -b || true
-          echo "--- current HEAD ---"
-          git rev-parse --abbrev-ref HEAD || true
-          echo "--- ls .git/config (first 200 lines) ---"
-          sed -n '1,200p' .git/config || true
-          echo "--- dist contents ---"
-          ls -la dist || true
-          du -sh dist || true
-      - name: Deploy to gh-pages via `gh-pages` npm
-        env:
-          REPO: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        run: |
-          echo "Deploying dist to gh-pages via gh-pages package"
-          npx -y gh-pages -d dist --repo "$REPO"
+        run: npm run build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
