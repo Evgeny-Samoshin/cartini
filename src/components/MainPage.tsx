@@ -88,7 +88,7 @@ export default function MainPage({ onNavigate, onNavigateToCase, onNavigateSEO, 
             <figure>
               <div className="overflow-hidden border border-primary/15">
               <img
-                src="/assets/cartini-hero-curtains.png"
+                src={import.meta.env.BASE_URL + 'assets/cartini-hero-curtains.png'}
                 alt="Премиальный интерьер со шторами, тюлем и объектным текстилем"
                 className="h-[560px] w-full object-cover"
                 loading="eager"
