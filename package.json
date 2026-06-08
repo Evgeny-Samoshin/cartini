@@ -8,6 +8,7 @@
     "build:client": "vite build",
     "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "preview": "vite preview --port 4173",
+    "deploy": "gh-pages -d dist",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit"
@@ -24,6 +25,7 @@
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.4",
     "tailwindcss": "^4.1.14",
+    "gh-pages": "^5.0.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.3"
   }

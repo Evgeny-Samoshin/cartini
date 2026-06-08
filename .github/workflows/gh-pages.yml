@@ -47,9 +47,9 @@ jobs:
           echo "--- dist contents ---"
           ls -la dist || true
           du -sh dist || true
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./dist
+      - name: Deploy to gh-pages via `gh-pages` npm
+        env:
+          REPO: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        run: |
+          echo "Deploying dist to gh-pages via gh-pages package"
+          npx -y gh-pages -d dist --repo "$REPO"
