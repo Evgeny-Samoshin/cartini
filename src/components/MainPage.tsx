@@ -1,184 +1,155 @@
-import { ArrowRight, Check, ClipboardList, Hotel, Layers, Ruler, ShieldCheck, Store, Theater, Utensils } from 'lucide-react';
+import { ArrowRight, Check, ClipboardList, Ruler, Scissors, Truck } from 'lucide-react';
 import { PageId } from '../types';
-import { CASE_STUDIES, SERVICES } from '../data';
+import { WORKS, CATALOG } from '../data';
 
 interface MainPageProps {
   onNavigate: (page: PageId) => void;
-  onNavigateToCase: (caseId: string) => void;
   onNavigateSEO: (slug: string) => void;
+  onNavigateCategory: (slug: string) => void;
   onOpenCallback: (niche?: string) => void;
 }
 
-export default function MainPage({ onNavigate, onNavigateToCase, onNavigateSEO, onOpenCallback }: MainPageProps) {
-  const segments = [
-    {
-      title: 'Гостиницы и отели',
-      desc: 'Блэкаут, тюль, портьеры, покрывала и текстиль для номерного фонда.',
-      slug: 'shtory-dlya-oteley',
-      icon: Hotel,
-      image: 'https://images.unsplash.com/photo-1560448075-bb485b067938?w=600&q=80'
-    },
-    {
-      title: 'Рестораны и кафе',
-      desc: 'Портьеры, скатерти, раннеры, чехлы и текстиль для сезонных зон.',
-      slug: 'shtory-dlya-restoranov',
-      icon: Utensils,
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80'
-    },
-    {
-      title: 'Офисы и БЦ',
-      desc: 'Римские и рулонные шторы для open space, кабинетов и переговорных.',
-      slug: 'shtory-dlya-ofisov',
-      icon: Store,
-      image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&q=80'
-    },
-    {
-      title: 'Театры и залы',
-      desc: 'Сценические занавесы, кулисы, задники и акустический текстиль.',
-      slug: 'scenicheskiy-tekstil',
-      icon: Theater,
-      image: 'https://images.unsplash.com/photo-1503095396549-807759245b35?w=600&q=80'
-    }
-  ];
+const asset = (path: string) => import.meta.env.BASE_URL + path;
+const labelForSlug = (slug: string) => CATALOG.find((c) => c.slug === slug)?.navLabel ?? slug;
+
+export default function MainPage({ onNavigate, onNavigateSEO, onNavigateCategory, onOpenCallback }: MainPageProps) {
+  const products = CATALOG.filter((c) => c.kind === 'product');
+  const spaces = CATALOG.filter((c) => c.kind === 'room' || c.kind === 'outdoor');
+  const works = WORKS.slice(0, 3);
 
   const process = [
-    { title: 'Задача', desc: 'Собираем фото, размеры, планы помещений и сценарии использования.', icon: ClipboardList },
-    { title: 'Ткани', desc: 'Подбираем фактуры под свет, уход, акустику и бюджет.', icon: Layers },
-    { title: 'Спецификация', desc: 'Фиксируем изделия, размеры, крепления и комплектацию по зонам.', icon: Ruler },
-    { title: 'Пошив', desc: 'Запускаем образец или партию с контролем геометрии.', icon: Layers },
-    { title: 'Передача', desc: 'Маркируем комплекты по помещениям и готовим к монтажу.', icon: ShieldCheck }
+    { title: 'Заявка', desc: 'Оставляете заявку — мы созваниваемся и согласуем удобное время выезда.', icon: ClipboardList },
+    { title: 'Бесплатный замер', desc: 'Мастер приезжает с образцами тканей, снимает размеры, помогает выбрать.', icon: Ruler },
+    { title: 'Пошив', desc: 'Шьём по вашим размерам в собственном цехе, от 7 рабочих дней.', icon: Scissors },
+    { title: 'Доставка и монтаж', desc: 'Привозим, вешаем шторы, устанавливаем карниз и регулируем механизмы.', icon: Truck }
   ];
 
   return (
     <div>
+      {/* Hero */}
       <section className="border-b border-primary/15">
-        <div className="mx-auto grid min-h-[680px] max-w-[1440px] grid-cols-1 items-center gap-12 px-6 py-14 lg:grid-cols-12 lg:py-20">
+        <div className="mx-auto grid min-h-[640px] max-w-[1440px] grid-cols-1 items-center gap-12 px-6 py-14 lg:grid-cols-12 lg:py-20">
           <div className="lg:col-span-6 animate-fade-up">
             <p className="mb-7 border-l border-accent pl-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
-              CARTINI · объектный текстиль
+              CARTINI · швейный цех в Саратове
             </p>
-            <h1 className="text-balance max-w-[650px] font-serif text-5xl font-medium leading-[0.96] text-primary md:text-7xl">
-              Шторы и текстильное оформление интерьеров
+            <h1 className="text-balance max-w-[650px] font-serif text-5xl font-medium leading-[0.98] text-primary md:text-7xl">
+              Шторы на заказ в Саратове
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-secondary md:text-lg">
-              Проектируем и шьем шторы, портьеры, блэкаут, римские и рулонные системы, сценический и ресторанный текстиль.
+              Шьём тюль, рулонные и римские шторы, блэкаут и плиссе по размерам вашего окна. Бесплатный замер на дому, образцы тканей с собой, пошив от 7 дней.
             </p>
             <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
               <button
-                onClick={() => onOpenCallback('hotels')}
+                onClick={() => onOpenCallback('home')}
                 className="h-12 border border-accent bg-accent px-8 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-200 hover:bg-accent-hover"
               >
-                Рассчитать проект
+                Бесплатный замер
               </button>
               <button
-                onClick={() => onNavigate('portfolio')}
+                onClick={() => onNavigate('catalog')}
                 className="h-12 border border-primary px-8 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors duration-200 hover:bg-primary hover:text-white"
               >
-                Смотреть проекты
+                Смотреть каталог
               </button>
             </div>
             <div className="mt-10 grid gap-3 border-t border-stone-300/70 pt-6 text-xs font-bold uppercase tracking-[0.18em] text-primary sm:grid-cols-3">
-              <span className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> По спецификации</span>
-              <span className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> Комплектация по зонам</span>
-              <span className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> Ткани под эксплуатацию</span>
+              <span className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> Замер бесплатно</span>
+              <span className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> Пошив по размерам</span>
+              <span className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> Своё производство</span>
             </div>
           </div>
 
           <div className="lg:col-span-6 animate-fade-up">
             <figure>
               <div className="overflow-hidden border border-primary/15">
-              <img
-                src={import.meta.env.BASE_URL + 'assets/cartini-hero-curtains.png'}
-                alt="Премиальный интерьер со шторами, тюлем и объектным текстилем"
-                className="h-[560px] w-full object-cover"
-                loading="eager"
-                referrerPolicy="no-referrer"
-              />
+                <img
+                  src={asset('assets/cartini-hero-curtains.png')}
+                  alt="Шторы на заказ в интерьере — тюль, портьеры и текстиль от CARTINI, Саратов"
+                  className="h-[560px] w-full object-cover"
+                  loading="eager"
+                  referrerPolicy="no-referrer"
+                />
               </div>
               <figcaption className="mt-4 grid gap-2 border-t border-primary/15 pt-4 sm:grid-cols-[1fr_2fr]">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">Проектный подход</span>
-                <span className="text-sm leading-relaxed text-secondary">Размеры, ткань, крепления, сборка и маркировка комплектов фиксируются до запуска партии.</span>
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">Пошив по размерам</span>
+                <span className="text-sm leading-relaxed text-secondary">Подбираем ткань под комнату и освещение, шьём точно по вашему окну.</span>
               </figcaption>
             </figure>
           </div>
         </div>
       </section>
 
-      <section className="bg-primary py-14 text-white">
-        <div className="mx-auto grid max-w-[1440px] grid-cols-1 px-6 md:grid-cols-3">
-          {[
-            ['Для объектов', 'Работаем с отелями, ресторанами, офисами, учреждениями и дизайнерами интерьеров.'],
-            ['Для повторяемости', 'Группируем окна и помещения, чтобы партия выглядела единообразно.'],
-            ['Для эксплуатации', 'Подбираем ткани с учетом света, стирки, плотности, складки и сценария использования.']
-          ].map(([title, desc], index) => (
-            <div key={title} className={`py-5 md:px-8 ${index > 0 ? 'border-t border-white/15 md:border-l md:border-t-0' : ''}`}>
-              <p className="font-serif text-2xl font-medium text-white">{title}</p>
-              <p className="mt-2 text-sm leading-relaxed text-gray-300">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-b border-primary/15 py-24">
-        <div className="mx-auto max-w-[1440px] px-6">
-          <div className="mb-12 max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-widest text-accent">Сегменты</span>
-            <h2 className="mt-2 font-serif text-3xl font-bold text-primary md:text-4xl">Под каждую нишу свой текстильный сценарий</h2>
-            <p className="mt-3 text-secondary">Ассортимент строится вокруг коммерческих интерьеров: от затемнения номера до сцены, переговорной или ресторанного зала.</p>
-          </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {segments.map((segment) => {
-              const Icon = segment.icon;
-              return (
-                <article key={segment.slug} className="group border-t border-primary/25 pt-3">
-                  <div className="h-52 overflow-hidden">
-                    <img src={segment.image} alt={segment.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" referrerPolicy="no-referrer" />
-                  </div>
-                  <div className="py-5">
-                    <Icon className="mb-4 h-6 w-6 text-accent transition-transform duration-300 group-hover:translate-x-1" />
-                    <h3 className="font-serif text-xl font-bold text-primary">{segment.title}</h3>
-                    <p className="mt-2 min-h-16 text-sm leading-relaxed text-secondary">{segment.desc}</p>
-                    <button onClick={() => onNavigateSEO(segment.slug)} className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-accent transition-colors hover:text-accent-hover">
-                      Открыть направление <ArrowRight className="h-4 w-4" />
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
+      {/* Product categories */}
       <section className="border-b border-primary/15 py-24">
         <div className="mx-auto max-w-[1440px] px-6">
           <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div className="max-w-2xl">
-              <span className="text-xs font-bold uppercase tracking-widest text-accent">Услуги</span>
-              <h2 className="mt-2 font-serif text-3xl font-bold text-primary md:text-4xl">От замера до готовых комплектов</h2>
+              <span className="text-xs font-bold uppercase tracking-widest text-accent">Каталог</span>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-primary md:text-4xl">Что мы шьём</h2>
+              <p className="mt-3 text-secondary">Выберите тип изделия — расскажем подробнее, покажем работы и рассчитаем стоимость.</p>
             </div>
-            <button onClick={() => onNavigate('services')} className="h-11 border border-primary px-6 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors duration-200 hover:bg-primary hover:text-white">
-              Все услуги
+            <button onClick={() => onNavigate('catalog')} className="h-11 shrink-0 border border-primary px-6 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors duration-200 hover:bg-primary hover:text-white">
+              Весь каталог
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3">
-            {SERVICES.slice(0, 3).map((service) => (
-              <article key={service.id} className="border-t border-primary/20 py-7 md:border-l md:px-7 first:md:border-l-0 first:md:pl-0">
-                <p className="text-xs font-bold uppercase tracking-widest text-accent">от {service.priceFrom || 'расчет'} ₽</p>
-                <h3 className="mt-3 font-serif text-xl font-bold text-primary">{service.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-secondary">{service.shortDescription}</p>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {products.map((item) => (
+              <article key={item.slug} className="group border-t border-primary/25 pt-3">
+                <button onClick={() => onNavigateCategory(item.slug)} className="block w-full cursor-pointer text-left">
+                  <div className="h-52 overflow-hidden">
+                    <img src={asset(item.galleryImages[0])} alt={item.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" referrerPolicy="no-referrer" />
+                  </div>
+                  <div className="py-5">
+                    <h3 className="font-serif text-xl font-bold text-primary">{item.navLabel}</h3>
+                    <p className="mt-1 text-xs font-bold uppercase tracking-widest text-accent">{item.priceFrom}</p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-accent transition-colors group-hover:text-accent-hover">
+                      Открыть <ArrowRight className="h-4 w-4" />
+                    </span>
+                  </div>
+                </button>
               </article>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Rooms strip */}
       <section className="border-b border-primary/15 py-24">
         <div className="mx-auto max-w-[1440px] px-6">
           <div className="mb-12 max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-widest text-accent">Процесс</span>
-            <h2 className="mt-2 font-serif text-3xl font-bold text-primary md:text-4xl">Понятный путь от идеи до монтажа</h2>
+            <span className="text-xs font-bold uppercase tracking-widest text-accent">По месту</span>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-primary md:text-4xl">Шторы для дома и улицы</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-5">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {spaces.map((item) => (
+              <button
+                key={item.slug}
+                onClick={() => onNavigateCategory(item.slug)}
+                className="group relative h-64 overflow-hidden border border-primary/15 text-left"
+              >
+                <img src={asset(item.galleryImages[0])} alt={item.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]" loading="lazy" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-6">
+                  <h3 className="font-serif text-2xl font-bold text-white">{item.navLabel.replace('В ', 'Шторы в ').replace('На ', 'Шторы на ')}</h3>
+                  <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white/90">
+                    Подробнее <ArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="border-b border-primary/15 py-24">
+        <div className="mx-auto max-w-[1440px] px-6">
+          <div className="mb-12 max-w-2xl">
+            <span className="text-xs font-bold uppercase tracking-widest text-accent">Как это работает</span>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-primary md:text-4xl">От заявки до готовых штор на окне</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4">
             {process.map((step, index) => {
               const Icon = step.icon;
               return (
@@ -196,27 +167,28 @@ export default function MainPage({ onNavigate, onNavigateToCase, onNavigateSEO, 
         </div>
       </section>
 
+      {/* Cases */}
       <section className="border-b border-primary/15 py-24">
         <div className="mx-auto max-w-[1440px] px-6">
           <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-accent">Проекты</span>
-              <h2 className="mt-2 font-serif text-3xl font-bold text-primary md:text-4xl">Типовые сценарии, которые легко адаптировать</h2>
+              <span className="text-xs font-bold uppercase tracking-widest text-accent">Наши работы</span>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-primary md:text-4xl">Примеры выполненных проектов</h2>
             </div>
             <button onClick={() => onNavigate('portfolio')} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-accent transition-colors hover:text-accent-hover">
-              Все проекты <ArrowRight className="h-4 w-4" />
+              Все работы <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {CASE_STUDIES.slice(0, 2).map((item) => (
-              <article key={item.id} className="border-t border-primary/25 pt-3">
-                <div className="overflow-hidden"><img src={item.image} alt={item.title} className="h-72 w-full object-cover transition-transform duration-700 hover:scale-[1.03]" loading="lazy" referrerPolicy="no-referrer" /></div>
-                <div className="py-6">
-                  <p className="text-xs font-bold uppercase tracking-widest text-accent">{item.categoryTitle}</p>
-                  <h3 className="mt-2 font-serif text-2xl font-bold text-primary">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-secondary">{item.briefResult}</p>
-                  <button onClick={() => onNavigateToCase(item.id)} className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-accent">
-                    Разобрать сценарий <ArrowRight className="h-4 w-4 text-accent" />
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {works.map((item) => (
+              <article key={item.id} className="flex flex-col border-t border-primary/25 pt-3">
+                <div className="overflow-hidden"><img src={asset(item.image)} alt={`${item.title} — работа CARTINI, ${item.location}`} className="h-72 w-full object-cover transition-transform duration-700 hover:scale-[1.03]" loading="lazy" referrerPolicy="no-referrer" /></div>
+                <div className="flex flex-grow flex-col py-6">
+                  <p className="text-xs font-bold uppercase tracking-widest text-accent">{labelForSlug(item.categorySlug)}</p>
+                  <h3 className="mt-2 font-serif text-2xl font-bold text-primary md:min-h-[4rem] lg:min-h-0">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-secondary">{item.fabric}</p>
+                  <button onClick={() => onNavigateCategory(item.categorySlug)} className="mt-auto self-start inline-flex items-center gap-2 pt-6 text-xs font-bold uppercase tracking-wider text-primary hover:text-accent">
+                    Хочу так же <ArrowRight className="h-4 w-4 text-accent" />
                   </button>
                 </div>
               </article>
@@ -225,18 +197,37 @@ export default function MainPage({ onNavigate, onNavigateToCase, onNavigateSEO, 
         </div>
       </section>
 
-      <section className="bg-primary py-24">
-        <div className="mx-auto max-w-[900px] px-6 text-center text-white">
-          <span className="text-xs font-bold uppercase tracking-widest text-accent">Расчет</span>
-          <h2 className="mt-3 font-serif text-3xl font-bold md:text-5xl">Подготовим вилку стоимости по вашему объекту</h2>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-gray-300 md:text-base">
-            Пришлите тип объекта, размеры или фотографии окон, желаемые ткани и сроки. Мы вернемся с предварительной спецификацией и вопросами для точного расчета.
+      {/* B2B secondary block */}
+      <section className="border-b border-primary/15 py-16">
+        <div className="mx-auto max-w-[1440px] px-6">
+          <div className="flex flex-col items-start justify-between gap-6 rounded-[1.5rem] border border-primary/15 bg-bg-warm/60 p-8 md:flex-row md:items-center md:p-10">
+            <div className="max-w-2xl">
+              <span className="text-xs font-bold uppercase tracking-widest text-accent">Работаем с объектами</span>
+              <h2 className="mt-2 font-serif text-2xl font-bold text-primary md:text-3xl">Текстиль для отелей, ресторанов и офисов</h2>
+              <p className="mt-3 text-sm leading-relaxed text-secondary">
+                Шьём объектный текстиль партиями: блэкаут для номерного фонда, текстиль для HoReCa, рулонные и римские шторы для бизнес-центров. Работаем по спецификации и через дизайнеров.
+              </p>
+            </div>
+            <button onClick={() => onNavigateSEO('shtory-dlya-oteley')} className="h-11 shrink-0 border border-primary px-6 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors duration-200 hover:bg-primary hover:text-white">
+              Объектам
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-b border-primary/15 py-24">
+        <div className="mx-auto max-w-[900px] px-6 text-center">
+          <span className="text-xs font-bold uppercase tracking-widest text-accent">Замер</span>
+          <h2 className="mt-3 font-serif text-3xl font-bold text-primary md:text-5xl">Запишитесь на бесплатный замер</h2>
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-secondary md:text-base">
+            Мастер приедет в удобное время с образцами тканей, снимет точные размеры и поможет выбрать решение под ваш интерьер. Замер по Саратову — бесплатно.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <button onClick={() => onOpenCallback('hotels')} className="h-12 rounded bg-accent px-8 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-accent-hover">
-              Оставить заявку
+            <button onClick={() => onOpenCallback('home')} className="h-12 rounded bg-accent px-8 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-accent-hover">
+              Записаться на замер
             </button>
-            <a href="https://wa.me/78452993104?text=Здравствуйте!%20Хочу%20рассчитать%20шторы%20и%20объектный%20текстиль." target="_blank" rel="noopener noreferrer" className="flex h-12 items-center justify-center rounded border border-gray-500 px-8 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:border-accent hover:text-accent">
+            <a href="https://wa.me/79879020909?text=Здравствуйте!%20Хочу%20заказать%20шторы%20и%20записаться%20на%20замер." target="_blank" rel="noopener noreferrer" className="flex h-12 items-center justify-center rounded border border-primary px-8 text-xs font-bold uppercase tracking-wider text-primary transition-colors hover:bg-primary hover:text-white">
               Написать в WhatsApp
             </a>
           </div>

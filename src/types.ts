@@ -1,13 +1,16 @@
 export type PageId =
   | 'home'
+  | 'catalog'
+  | 'category'
   | 'services'
   | 'portfolio'
   | 'case-detail'
   | 'how-we-work'
   | 'about'
-  | 'vk-feed'
   | 'seo-landing'
   | 'contacts';
+
+export type CatalogKind = 'product' | 'room' | 'outdoor';
 
 export type NicheId =
   | 'hotels'
@@ -77,6 +80,31 @@ export interface SEONicheConfig {
   solutions: { title: string; desc: string }[];
   defaultNiche: NicheId;
   priceRange: { item: string; price: string }[];
+}
+
+export interface Work {
+  id: string;
+  title: string;
+  categorySlug: string;
+  image: string;
+  location: string;
+  fabric: string;
+}
+
+export interface CategoryPage {
+  slug: string;
+  kind: CatalogKind;
+  navLabel: string;
+  title: string;
+  metaDescription: string;
+  keyword: string;
+  heroDescription: string;
+  priceFrom: string;
+  intro: string[];
+  variants?: { title: string; desc: string }[];
+  galleryImages: string[];
+  relatedSlugs?: string[];
+  faqIds?: string[];
 }
 
 export interface FAQItem {

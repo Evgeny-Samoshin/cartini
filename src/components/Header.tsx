@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { Menu, X, Phone, ShoppingBag, Eye, HelpCircle, Compass, Award, MessageSquare } from 'lucide-react';
+import { Menu, X, Phone, ShoppingBag, Eye, Compass, Award } from 'lucide-react';
 import { PageId } from '../types';
 
 interface HeaderProps {
@@ -17,11 +17,9 @@ export default function Header({ currentPage, onNavigate, onOpenCallback }: Head
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 'services', label: 'Услуги', icon: ShoppingBag },
-    { id: 'portfolio', label: 'Проекты', icon: Eye },
-    { id: 'how-we-work', label: 'Процесс', icon: HelpCircle },
+    { id: 'catalog', label: 'Каталог', icon: ShoppingBag },
+    { id: 'portfolio', label: 'Наши работы', icon: Eye },
     { id: 'about', label: 'О компании', icon: Award },
-    { id: 'vk-feed', label: 'Новости', icon: MessageSquare },
     { id: 'contacts', label: 'Контакты', icon: Compass },
   ] as const;
 
@@ -33,7 +31,7 @@ export default function Header({ currentPage, onNavigate, onOpenCallback }: Head
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-primary/15 bg-bg-main/95">
-      <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-x-5 gap-y-2 px-4 py-3 lg:grid-cols-[auto_1fr_auto] lg:items-center xl:h-20 xl:px-6 xl:py-0">
+      <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-x-5 gap-y-2 px-4 py-3 md:grid-cols-[auto_1fr_auto] md:items-center xl:h-20 xl:px-6 xl:py-0">
         {/* Brand Logotype */}
         <button
           type="button"
@@ -44,23 +42,25 @@ export default function Header({ currentPage, onNavigate, onOpenCallback }: Head
             C
           </div>
           <div className="flex flex-col">
-            <span className="whitespace-nowrap text-sm font-bold uppercase tracking-[0.18em] text-primary leading-tight transition-colors group-hover:text-accent">
+            <span className="whitespace-nowrap text-[28px] font-bold font-serif uppercase tracking-[0.18em] text-primary leading-tight transition-colors group-hover:text-accent">
               CARTINI
             </span>
-            <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.14em] leading-tight text-secondary">
+            <span className="whitespace-nowrap text-[8px] font-bold uppercase tracking-[0.14em] leading-tight text-secondary">
               интерьер · текстиль
             </span>
           </div>
         </button>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden w-full items-center justify-center gap-7 border-t border-primary/15 pt-2 lg:col-span-3 lg:row-start-2 lg:flex xl:col-span-1 xl:col-start-2 xl:row-start-1 xl:min-w-0 xl:border-t-0 xl:pt-0">
+        <nav className="hidden w-full items-center justify-center gap-7 border-t border-primary/15 pt-2 md:col-span-3 md:row-start-2 md:flex xl:col-span-1 xl:col-start-2 xl:row-start-1 xl:min-w-0 xl:border-t-0 xl:pt-0">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavClick(item.id)}
               className={`cursor-pointer whitespace-nowrap border-b py-2 text-[12px] font-semibold uppercase tracking-[0.16em] transition-colors duration-200 hover:text-accent ${
-                currentPage === item.id || (item.id === 'portfolio' && currentPage === 'case-detail')
+                currentPage === item.id ||
+                (item.id === 'portfolio' && currentPage === 'case-detail') ||
+                (item.id === 'catalog' && currentPage === 'category')
                   ? 'border-accent text-accent'
                   : 'border-transparent text-primary'
               }`}
@@ -71,13 +71,13 @@ export default function Header({ currentPage, onNavigate, onOpenCallback }: Head
         </nav>
 
         {/* Right side contact information & Callback Button */}
-        <div className="absolute right-4 top-5 hidden shrink-0 items-center gap-4 md:flex lg:static lg:col-start-3 lg:row-start-1 lg:ml-auto xl:gap-5">
+        <div className="absolute right-4 top-5 hidden shrink-0 items-center gap-4 md:flex md:static md:col-start-3 md:row-start-1 md:ml-auto xl:gap-5">
           <a
-            href="tel:+78452993104"
+            href="tel:+79879020909"
             className="flex items-center gap-1.5 whitespace-nowrap text-primary hover:text-accent transition-colors font-bold text-sm tracking-wide"
           >
             <Phone className="h-4 w-4 text-accent" />
-            <span>+7 (8452) 99-31-04</span>
+            <span>+7 (987) 902-09-09</span>
           </a>
 
           <button onClick={onOpenCallback} className="h-10 whitespace-nowrap border border-accent bg-accent px-5 text-xs font-semibold uppercase tracking-[0.14em] text-white transition-colors duration-200 hover:bg-accent-hover">
@@ -86,14 +86,14 @@ export default function Header({ currentPage, onNavigate, onOpenCallback }: Head
         </div>
 
         {/* Mobile controls */}
-        <div className="absolute right-4 top-5 flex items-center gap-4 lg:hidden">
+        <div className="absolute right-4 top-5 flex items-center gap-4 md:hidden">
           {/* Quick Phone Call icon for smartphone clickers */}
           <a
-            href="tel:+78452993104"
+            href="tel:+79879020909"
             className="border border-primary/15 p-2 text-primary transition-colors hover:text-accent md:hidden"
             aria-label="Позвонить в цех"
           >
-            <Phone className="h-4 w-4" />
+            <Phone className="h-6 w-6" />
           </a>
 
           {/* Hamburger toggle */}
@@ -131,9 +131,9 @@ export default function Header({ currentPage, onNavigate, onOpenCallback }: Head
 
             {/* Callback CTA on mobile */}
             <div className="flex flex-col gap-3 border-t border-primary/15 pt-4">
-              <a href="tel:+78452993104" className="flex items-center justify-center gap-2 border border-primary/20 py-3 font-bold text-primary transition-colors hover:border-accent">
+              <a href="tel:+79879020909" className="flex items-center justify-center gap-2 border border-primary/20 py-3 font-bold text-primary transition-colors hover:border-accent">
                 <Phone className="h-4 w-4 text-accent" />
-                <span>+7 (8452) 99-31-04</span>
+                <span>+7 (987) 902-09-09</span>
               </a>
 
               <button

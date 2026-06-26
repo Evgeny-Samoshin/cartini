@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server';
 import App from './App';
-import { getPrerenderPaths, getRouteTitle, resolveRoute } from './routing';
+import { getPrerenderPaths, getRouteMeta, resolveRoute } from './routing';
 import './index.css';
 
 export function render(path: string) {
@@ -8,7 +8,11 @@ export function render(path: string) {
 }
 
 export function titleForPath(path: string) {
-  return getRouteTitle(resolveRoute(path));
+  return getRouteMeta(resolveRoute(path)).title;
+}
+
+export function metaForPath(path: string) {
+  return getRouteMeta(resolveRoute(path));
 }
 
 export { getPrerenderPaths };

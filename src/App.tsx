@@ -12,12 +12,13 @@ import CallbackModal from './components/CallbackModal';
 
 // All subpages imports
 import MainPage from './components/MainPage';
+import CatalogPage from './components/CatalogPage';
+import CategoryPage from './components/CategoryPage';
 import ServicesPage from './components/ServicesPage';
 import PortfolioPage from './components/PortfolioPage';
 import CaseDetailPage from './components/CaseDetailPage';
 import HowWeWorkPage from './components/HowWeWorkPage';
 import AboutPage from './components/AboutPage';
-import VkFeedPage from './components/VkFeedPage';
 import SeoLandingPage from './components/SeoLandingPage';
 import ContactsPage from './components/ContactsPage';
 
@@ -31,6 +32,7 @@ export default function App({ initialPath }: AppProps) {
   const [currentPage, setCurrentPage] = useState<PageId>(initialRoute.page);
   const [activeCaseStudyId, setActiveCaseStudyId] = useState<string>(initialRoute.caseId);
   const [activeSeoSlug, setActiveSeoSlug] = useState<string>(initialRoute.seoSlug);
+  const [activeCategorySlug, setActiveCategorySlug] = useState<string>(initialRoute.categorySlug);
   
   // Callback popup states
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
@@ -49,6 +51,7 @@ export default function App({ initialPath }: AppProps) {
       setCurrentPage(route.page);
       setActiveCaseStudyId(route.caseId);
       setActiveSeoSlug(route.seoSlug);
+      setActiveCategorySlug(route.categorySlug);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -56,8 +59,8 @@ export default function App({ initialPath }: AppProps) {
   }, []);
 
   useEffect(() => {
-    document.title = getRouteTitle({ page: currentPage, caseId: activeCaseStudyId, seoSlug: activeSeoSlug });
-  }, [activeCaseStudyId, activeSeoSlug, currentPage]);
+    document.title = getRouteTitle({ page: currentPage, caseId: activeCaseStudyId, seoSlug: activeSeoSlug, categorySlug: activeCategorySlug });
+  }, [activeCaseStudyId, activeSeoSlug, activeCategorySlug, currentPage]);
 
   const handleNavigate = (page: PageId) => {
     updateUrl(pagePaths[page] ?? '/');
@@ -79,6 +82,13 @@ export default function App({ initialPath }: AppProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleNavigateToCategory = (slug: string) => {
+    updateUrl(`/${slug}`);
+    setActiveCategorySlug(slug);
+    setCurrentPage('category');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleOpenCallback = (niche = '') => {
     setCallbackInitialNiche(niche);
     setIsCallbackOpen(true);
@@ -90,9 +100,25 @@ export default function App({ initialPath }: AppProps) {
         return (
           <MainPage
             onNavigate={handleNavigate}
-            onNavigateToCase={handleNavigateToCase}
             onNavigateSEO={handleNavigateToSEO}
+            onNavigateCategory={handleNavigateToCategory}
             onOpenCallback={handleOpenCallback}
+          />
+        );
+      case 'catalog':
+        return (
+          <CatalogPage
+            onNavigateCategory={handleNavigateToCategory}
+            onOpenCallback={handleOpenCallback}
+          />
+        );
+      case 'category':
+        return (
+          <CategoryPage
+            slug={activeCategorySlug}
+            onNavigateCategory={handleNavigateToCategory}
+            onOpenCallback={handleOpenCallback}
+            onNavigate={handleNavigate}
           />
         );
       case 'services':
@@ -100,7 +126,7 @@ export default function App({ initialPath }: AppProps) {
       case 'portfolio':
         return (
           <PortfolioPage
-            onNavigateToCase={handleNavigateToCase}
+            onNavigateCategory={handleNavigateToCategory}
             onOpenCallback={handleOpenCallback}
           />
         );
@@ -117,8 +143,6 @@ export default function App({ initialPath }: AppProps) {
         return <HowWeWorkPage onOpenCallback={handleOpenCallback} />;
       case 'about':
         return <AboutPage onOpenCallback={handleOpenCallback} onNavigate={handleNavigate} />;
-      case 'vk-feed':
-        return <VkFeedPage />;
       case 'seo-landing':
         return (
           <SeoLandingPage
@@ -134,8 +158,8 @@ export default function App({ initialPath }: AppProps) {
         return (
           <MainPage
             onNavigate={handleNavigate}
-            onNavigateToCase={handleNavigateToCase}
             onNavigateSEO={handleNavigateToSEO}
+            onNavigateCategory={handleNavigateToCategory}
             onOpenCallback={handleOpenCallback}
           />
         );
@@ -160,6 +184,7 @@ export default function App({ initialPath }: AppProps) {
       <Footer
         onNavigate={handleNavigate}
         onNavigateSEO={handleNavigateToSEO}
+        onNavigateCategory={handleNavigateToCategory}
       />
 
       {/* Shared Lead Forms Popup */}
