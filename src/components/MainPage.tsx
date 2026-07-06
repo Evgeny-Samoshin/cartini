@@ -37,7 +37,7 @@ export default function MainPage({ onNavigate, onNavigateSEO, onNavigateCategory
               Шторы на заказ в Саратове
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-secondary md:text-lg">
-              Шьём тюль, рулонные и римские шторы, блэкаут и плиссе по размерам вашего окна. Бесплатный замер на дому, образцы тканей с собой, пошив от 7 дней.
+              Шьём тюль, портьеры (блэкаут, канвас, замша, рогожка и др.), римские шторы, шторы на люверсах, шторы на петлях, рулонные шторы, ламбрекены любой сложности. Также шьём шторы на нестандартные окна (эркер, мансарда) по вашим размерам. Бесплатный замер.
             </p>
             <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
               <button
